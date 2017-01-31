@@ -37,7 +37,7 @@ reg [C_M_AXI_ADDR_WIDTH-1 : 0] reg_waddr_out;
 reg axi_awvalid;
 
 reg [C_M_AXI_DATA_WIDTH-1 : 0] axi_wdata;
-reg [C_M_AXI_DATA_WIDTH-1 : 0] reg_data_out;
+reg [C_M_AXI_DATA_WIDTH-1 : 0] reg_wdata_out;
 reg axi_wvalid;
 
 reg axi_bready;
@@ -97,7 +97,8 @@ always @( posedge M_AXI_ACLK )
 	    end 
     else 
         begin
-          axi_wdata <= reg_data_out;
+         if (axi_awvalid && M_AXI_AWREADY)
+          axi_wdata <= reg_wdata_out;
         end
     end
     
