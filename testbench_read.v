@@ -104,7 +104,7 @@ initial
         aresetn_test = 0;
         rdata_out_test = 0;
         araddr_test = 0;
-        #100 aresetn_test = 1;      //Включение ARESETN
+        //#100 aresetn_test = 1;      //Включение ARESETN
         #50 araddr_test = address;  //Выставление на шину адреса 
         #100 araddr_test = 0;
         #50  rdata_out_test = data; //Выставление на шину данных
