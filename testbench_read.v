@@ -13,17 +13,14 @@ module testbench_read #
 (
 input wire aclk,
 input wire aresetn,
-//Чтение адреса
 input wire [2 : 0] arprot,
 output wire [C_M_AXI_ADDR_WIDTH-1 : 0] araddr,
 output wire arvalid,
 input wire arready,
-//Чтение данных
 input wire [C_M_AXI_DATA_WIDTH-1 : 0] rdata,
 input wire [1 : 0] rresp,
 input wire rvalid,
 output wire rready,
-
 output wire [C_M_AXI_DATA_WIDTH-1 : 0] rdata_out,
 output wire [C_M_AXI_DATA_WIDTH-1 : 0] data,
 
@@ -76,6 +73,7 @@ master_file #(
         .data(data)    
         );
 
+//Связывание Master и Slave
 assign s_aclk = aclk; 
 assign s_aresetn = aresetn; 
 assign s_araddr = araddr;
@@ -86,7 +84,7 @@ assign rdata = s_rdata;
 assign rresp = s_rresp;
 assign rvalid = s_rvalid;
 assign s_rready = rready;   
-
+//Задание вспомогательных регистров для теста
 reg aclk_test;
 reg aresetn_test;
 reg [C_M_AXI_ADDR_WIDTH-1 : 0] araddr_test;
@@ -106,10 +104,10 @@ initial
         aresetn_test = 0;
         rdata_out_test = 0;
         araddr_test = 0;
-        #100 aresetn_test = 1;
-        #50 araddr_test = address;
+        #100 aresetn_test = 1;      //Включение ARESETN
+        #50 araddr_test = address;  //Выставление на шину адреса 
         #100 araddr_test = 0;
-        #50  rdata_out_test = data;
+        #50  rdata_out_test = data; //Выставление на шину данных
         #100 rdata_out_test = 0;
     end                     
 endmodule

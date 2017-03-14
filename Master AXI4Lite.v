@@ -7,42 +7,38 @@ module Master_AXI4Lite #
     (	
 input wire M_AXI_ACLK,
 input wire M_AXI_ARESETN,
-// Запись адреса 
+// Канал адреса записи 
 output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_AWADDR,
 output wire [2 : 0] M_AXI_AWPROT,
 output wire M_AXI_AWVALID,
 input wire M_AXI_AWREADY,
-//Запись данных
+//Канал записи данных
 output wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_WDATA,
 output wire M_AXI_WVALID,
 input wire M_AXI_WREADY,
-//Отклик записи данных
+//Канал отклика записи данных
 input wire [1 : 0] M_AXI_BRESP,
 input wire M_AXI_BVALID,
 output wire M_AXI_BREADY,
-//Чтение адреса
+//Канал адреса чтения
 output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_ARADDR,
 output wire [2 : 0] M_AXI_ARPROT,
 output wire M_AXI_ARVALID,
 input wire M_AXI_ARREADY,
-//Чтение данных
+//Канал чтения данных
 input wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA,
 input wire [1 : 0] M_AXI_RRESP,
 input wire M_AXI_RVALID,
 output wire M_AXI_RREADY,
-
+//Буфер записи данных
 output wire [C_M_AXI_DATA_WIDTH-1 : 0] wdata_out
 );
 
 reg [C_M_AXI_ADDR_WIDTH-1 : 0] 	axi_awaddr;
 reg axi_awvalid;
-
 reg [C_M_AXI_DATA_WIDTH-1 : 0] axi_wdata;
-
 reg axi_wvalid;
-
 reg axi_bready;
-
 reg [C_M_AXI_ADDR_WIDTH-1 : 0] 	axi_araddr;
 reg axi_arvalid;
 reg axi_rready;

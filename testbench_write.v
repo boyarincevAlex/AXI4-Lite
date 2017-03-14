@@ -13,22 +13,19 @@ module testbench_write #
 (
 input wire aclk,
 input wire aresetn,
-// Запись адреса (issued by master, acceped by Slave)
 output wire [C_M_AXI_ADDR_WIDTH-1 : 0] awaddr,
 input wire [2 : 0] awprot,
 output wire awvalid,
 input wire awready,
-//Запись данных
 output wire [C_M_AXI_DATA_WIDTH-1 : 0] wdata,
 output wire wvalid,
 input wire wready,
-//Отклик записи данных
 input wire [1 : 0] bresp,
 input wire bvalid,
 output wire bready,
-
 output wire [C_M_AXI_DATA_WIDTH-1 : 0] wdata_out,
 output wire [C_M_AXI_DATA_WIDTH-1 : 0] data,
+
 input wire  s_aclk,
 input wire  s_aresetn,
 input wire [C_S_AXI_ADDR_WIDTH-1 : 0] s_awaddr,
@@ -83,7 +80,7 @@ master_file #(
      .s_bvalid(s_bvalid),
      .s_bready(s_bready)   
       );
-
+//Связывание Master и Slave
 assign s_aclk = aclk; 
 assign s_aresetn = aresetn; 
 assign s_awaddr = awaddr;
@@ -96,7 +93,7 @@ assign wready = s_wready;
 assign bresp = s_bresp;
 assign bvalid = s_bvalid;
 assign s_bready = bready;
-
+//Задание вспомогательных регистров для теста
 reg aclk_test;
 reg aresetn_test;
 reg [C_M_AXI_ADDR_WIDTH-1 : 0] awaddr_test;
@@ -119,10 +116,10 @@ initial
         aresetn_test = 0;
         reg_wdata = 0;
         awaddr_test = 0;
-        #100 aresetn_test = 1;
-        #50 awaddr_test = address;
-        #100 awaddr_test = 0;
-        #50  reg_wdata = data;
+        #100 aresetn_test = 1;     //Включение ARESETN
+        #50 awaddr_test = address; //Выставление на шину адреса 
+        #100 awaddr_test = 0;       
+        #50  reg_wdata = data;     //Выставление на шину данных
         #100 reg_wdata = 0;
         #50  bresp_test = 0;
         #50  bresp_test = 2'bZ;

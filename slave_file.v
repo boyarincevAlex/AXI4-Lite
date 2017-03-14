@@ -2,13 +2,10 @@
 
 	module slave_file #
 	(			 
-		// Do not modify the parameters beyond this line
-		// Parameters of Axi Slave Bus Interface S00_AXI
 		parameter integer C_S_AXI_DATA_WIDTH	= 32,
 		parameter integer C_S_AXI_ADDR_WIDTH	= 4
 	)
 	(
-		// Ports of Axi Slave Bus Interface S00_AXI
 		input wire  s_aclk,
 		input wire  s_aresetn,
 		input wire [C_S_AXI_ADDR_WIDTH-1 : 0] s_awaddr,
@@ -59,11 +56,15 @@ Slave_AXI4Lite # (
             .S_AXI_RREADY(s_rready),
             .rdata_out(rdata_out)
         );
-
+//Объявления регистров в Slave файле
+//Буферный регистр адреса записи
 reg [C_S_AXI_ADDR_WIDTH-1 : 0] reg_waddr_in;
+//Буферный регистр адреса чтения
 reg [C_S_AXI_ADDR_WIDTH-1 : 0] reg_raddr_in;
+//Массив данных в Master файле
 reg [C_S_AXI_DATA_WIDTH-1 : 0] slave_reg [16 : 1];
 
+// Заполнение массива данных
 initial
     begin: d
         integer i;
@@ -71,21 +72,23 @@ initial
             slave_reg[i]=i;
     end
 
+//Сохранение адреса записи в буферный регистр
 always @(posedge s_awready)
     begin
         reg_waddr_in <= s_awaddr;
     end
-    
+// Запись данных из Master по заданному адресу    
 always @(posedge s_wready)
         begin
             slave_reg[reg_waddr_in] <= s_wdata;
         end
 
+//Сохранение адреса чтения в буферный регистр
 always @(posedge s_arready)
     begin
         reg_raddr_in <= s_araddr;
     end
-
+//Вывод данных из массива по заданному адресу на шину данных
 assign data = slave_reg[reg_raddr_in];
 
 endmodule
