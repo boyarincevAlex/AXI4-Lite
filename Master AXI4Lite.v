@@ -7,9 +7,9 @@ module Master_AXI4Lite #
     (	
 input wire M_AXI_ACLK,
 input wire M_AXI_ARESETN,
-// Запись адреса (issued by master, acceped by Slave)
+// Запись адреса 
 output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_AWADDR,
-input wire [2 : 0] M_AXI_AWPROT,
+output wire [2 : 0] M_AXI_AWPROT,
 output wire M_AXI_AWVALID,
 input wire M_AXI_AWREADY,
 //Запись данных
@@ -22,41 +22,38 @@ input wire M_AXI_BVALID,
 output wire M_AXI_BREADY,
 //Чтение адреса
 output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_ARADDR,
-input wire [2 : 0] M_AXI_ARPROT,
+output wire [2 : 0] M_AXI_ARPROT,
 output wire M_AXI_ARVALID,
 input wire M_AXI_ARREADY,
 //Чтение данных
 input wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA,
 input wire [1 : 0] M_AXI_RRESP,
 input wire M_AXI_RVALID,
-output wire M_AXI_RREADY
+output wire M_AXI_RREADY,
+
+output wire [C_M_AXI_DATA_WIDTH-1 : 0] wdata_out
 );
 
 reg [C_M_AXI_ADDR_WIDTH-1 : 0] 	axi_awaddr;
-reg [C_M_AXI_ADDR_WIDTH-1 : 0] reg_waddr_out;
 reg axi_awvalid;
 
 reg [C_M_AXI_DATA_WIDTH-1 : 0] axi_wdata;
-reg [C_M_AXI_DATA_WIDTH-1 : 0] reg_wdata_out;
+
 reg axi_wvalid;
 
 reg axi_bready;
 
 reg [C_M_AXI_ADDR_WIDTH-1 : 0] 	axi_araddr;
 reg axi_arvalid;
-reg [C_M_AXI_ADDR_WIDTH-1 : 0] reg_raddr_out;
-
-reg  	axi_rready;
+reg axi_rready;
 
 assign M_AXI_AWVALID = axi_awvalid;
-assign M_AXI_AWADDR = axi_awaddr;
 assign M_AXI_WDATA = axi_wdata;
 assign M_AXI_WVALID = axi_wvalid;
 assign M_AXI_BREADY	= axi_bready;
 assign M_AXI_ARVALID = axi_arvalid;
-assign M_AXI_ARADDR = axi_araddr;
 assign M_AXI_RREADY	= axi_rready;
-
+ 
 //Описание AWVALID
 always @( posedge M_AXI_ACLK )
 	begin
@@ -80,11 +77,11 @@ always @( posedge M_AXI_ACLK )
 	begin
 	if ( M_AXI_ARESETN == 1'b0 )
 	    begin
-	      axi_awaddr <= 1'b0;
+	      axi_awaddr <= 0;
 	    end 
     else 
         begin
-          axi_awaddr <= reg_waddr_out;
+          axi_awaddr <= M_AXI_AWADDR;
         end
     end
 
@@ -93,12 +90,14 @@ always @( posedge M_AXI_ACLK )
 	begin
 	if ( M_AXI_ARESETN == 1'b0 )
 	    begin
-	      axi_wdata <= 1'b0;
+	      axi_wdata <= 0;
 	    end 
     else 
         begin
-         if (axi_awvalid && M_AXI_AWREADY)
-          axi_wdata <= reg_wdata_out;
+         if (~M_AXI_AWREADY)
+          axi_wdata <= wdata_out;
+         else 
+            axi_wdata <= 0;
         end
     end
     
@@ -112,10 +111,11 @@ always @( posedge M_AXI_ACLK )
 	  else 
 	    begin 
 	      if (M_AXI_WDATA)
-	      axi_wvalid <= 1'b1;
-	      else if (~M_AXI_WDATA)
+	               axi_wvalid <= 1'b1;
+	      else 
+	        if (~M_AXI_WDATA)
 	           begin
-	           axi_wvalid <= 1'b0;
+	               axi_wvalid <= 1'b0;
 	           end
         end 
 	 end   
@@ -143,16 +143,16 @@ always @( posedge M_AXI_ACLK )
 	begin
 	  if ( M_AXI_ARESETN == 1'b0 )
 	    begin
-	      axi_arvalid <= 1'b0;
+	      axi_arvalid <= 0;
 	    end 
 	  else 
 	    begin 
-	      if (M_AXI_ARADDR)
-	       axi_arvalid <= 1'b1;
-	      else if (~M_AXI_AWADDR)
-	           begin
-	           axi_arvalid <= 1'b0;
-	           end
+	        if (M_AXI_ARADDR)
+	          axi_arvalid <= 1'b1;
+	      else
+	        begin
+	          axi_arvalid <= 1'b0;
+	        end
         end 
 	 end  
 	     
@@ -161,13 +161,14 @@ always @( posedge M_AXI_ACLK )
 	begin
 	if ( M_AXI_ARESETN == 1'b0 )
 	    begin
-	      axi_araddr <= 1'b0;
+	      axi_araddr <= 0;
 	    end 
     else 
         begin
-          axi_araddr <= reg_raddr_out;
+          axi_araddr <= M_AXI_ARADDR;
         end
     end
+
 //Описание RREADY
 always @( posedge M_AXI_ACLK )
 	begin

@@ -1,8 +1,12 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Admin/Desktop/AXI4Lite/Slave AXI4Lite.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Slave_AXI4Lite
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Admin/Desktop/AXI4Lite/Master AXI4Lite.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module Master_AXI4Lite
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Admin/Desktop/AXI4Lite/slave_file.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module slave_file
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Admin/Desktop/AXI4Lite/master_file.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module master_file
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Admin/Desktop/AXI4Lite/Master_testbench.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module master_testbench
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Admin/Desktop/AXI4Lite/testbench_write.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module testbench_write
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Admin/Desktop/AXI4Lite/AXI4Lite.sim/sim_1/behav/glbl.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module glbl
